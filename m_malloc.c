@@ -152,3 +152,40 @@ void *realloc(void *p, size_t tamano){
   free(aux);
   return nuevo_ptr;
 }
+/*
+void *realloc(void *p, size_t tamano){
+  size_t s;
+  ptr_bloque aux, nuevo;
+  void *nuevo_ptr;
+  if(!p)
+    return m_malloc(tamano);
+
+  if(validar_direccion(p)){
+    s = align4(tamano);
+    aux = conseguir_bloque(p);
+    if(aux->tamano >= s){
+      if(aux->tamano - s >= (TAMANO_BLOQUE + 4))
+        dividir_bloque(aux, s);
+    }else{
+      // Intentamos fusion
+      if(aux->siguiente && aux->siguiente->libre &&
+        (aux->tamano + TAMANO_BLOQUE + aux->siguiente->tamano) >= s){
+          fusion(aux);
+          if(aux->tamano - s >= (TAMANO_BLOQUE + 4))
+            dividir_bloque(aux, s);
+
+      }else{
+        nuevo_ptr = m_malloc(s);
+        if(!nuevo_ptr)
+          return NULL;
+        nuevo = conseguir_bloque(nuevo_ptr);
+        copiar_bloque(aux, nuevo);
+        free(aux);
+        return nuevo_ptr;
+      }
+    }
+    return aux;
+  }
+  return NULL;
+}
+*/

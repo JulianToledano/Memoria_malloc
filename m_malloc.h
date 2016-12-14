@@ -80,5 +80,15 @@ int validar_direccion(void *p);
 // Función realloc
 void copiar_bloque(ptr_bloque org, ptr_bloque dst);
 
+/*
+ Creamos un nuevo bloque con el tamaño indicado
+ Copios los datos del antiguo al nuevo
+ Liberamos el antiguo bloque
+ Devolvemos el punteros
 
+ Para mayor eficiencia:
+    -> Si el tamaño no cambia o el tamaño extra que había es sificiente, no hacemos nada
+    -> Si reducimos el bloque
+    -> Si el siguiente bloque está vacío y contiene suficiente espacio, los fusionamos
+ */
 void *realloc(void *p, size_t tamano);
