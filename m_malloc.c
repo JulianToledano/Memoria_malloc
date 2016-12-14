@@ -92,6 +92,8 @@ ptr_bloque fusion(ptr_bloque bloque){
   return bloque;
 }
 
+
+// Funciones para free()
 ptr_bloque conseguir_bloque(void *p){
   char* temp;
   temp = p;
@@ -125,4 +127,28 @@ void free(void *p){
       brk(aux);
     }
   }
+}
+
+
+// Funciones para realloc()
+void copiar_bloque(ptr_bloque org, ptr_bloque dst){
+  int *datos_org, *datos_dst;
+  size_t i;
+  datos_org = org->ptr;
+  datos_dst = dst->ptr;
+  for(i = 0; i*4 < org->tamano && 1*4 < dst->tamano; i++)
+    datos_dst[i] = datos_org[i];
+}
+
+void *realloc(void *p, size_t tamano){
+  size_t s;
+  ptr_bloque aux, nuevo;
+  void *nuevo_ptr;
+  s = align4(tamano);
+  aux = conseguir_bloque(p);
+  nuevo_ptr = m_malloc(s);
+  nuevo = conseguir_bloque(nuevo_ptr);
+  copiar_bloque(aux, nuevo_ptr);
+  free(aux);
+  return nuevo_ptr;
 }

@@ -74,5 +74,11 @@ ptr_bloque fusion(ptr_bloque bloque);
 
 // Obtener bloque desde una dirección
 ptr_bloque conseguir_bloque(void *p);
-
+//EXPLICAAAR
 int validar_direccion(void *p);
+
+// Función realloc
+void copiar_bloque(ptr_bloque org, ptr_bloque dst);
+
+
+void *realloc(void *p, size_t tamano);
