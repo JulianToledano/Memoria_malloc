@@ -64,3 +64,15 @@ void dividir_bloque(ptr_bloque a_dividir, size_t m_tamano);
               -> Expandimos el heap
 */
 void *m_malloc(size_t m_tamano);
+
+// Función free
+void free(void *p);
+
+// Para evitar la fragmentación en la medida de lo posible cuando
+// liberemos un bloque y sus vecinos también estén libres los fusionaremos
+ptr_bloque fusion(ptr_bloque bloque);
+
+// Obtener bloque desde una dirección
+ptr_bloque conseguir_bloque(void *p);
+
+int validar_direccion(void *p);

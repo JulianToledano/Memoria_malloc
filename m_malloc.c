@@ -80,3 +80,49 @@ void *m_malloc(size_t m_tamano){
   }
   return (aux->dato);
 }
+
+ptr_bloque fusion(ptr_bloque bloque){
+  // Si existe un bloque y está vacío
+  if(bloque->siguiente && bloque->siguiente->libre){
+    bloque->tamano += TAMANO_BLOQUE + bloque->siguiente->tamano;
+    bloque->siguiente = bloque->siguiente->siguiente;
+    if(bloque->siguiente)
+      bloque->siguiente->previo = bloque;
+  }
+  return bloque;
+}
+
+ptr_bloque conseguir_bloque(void *p){
+  char* temp;
+  temp = p;
+  return (p = temp -= TAMANO_BLOQUE);
+}
+
+int validar_direccion(void *p){
+  if(base){
+    if(p > base && p < sbrk(0))
+      return (p == (conseguir_bloque(p))->ptr);
+  }
+  return 0;
+}
+
+void free(void *p){
+  ptr_bloque aux;
+  if(validar_direccion(p)){
+    aux = conseguir_bloque(p);
+    aux->libre = 1;
+    // fusion
+    if(aux->previo && aux->previo->libre)
+      aux = fusion(aux->previo);
+    if(aux->siguiente)
+      fusion(aux);
+    else{
+      // Liberamos el final del heap
+      if(aux->previo)
+        aux->previo->siguiente = NULL;
+      else
+        base = NULL;
+      brk(aux);
+    }
+  }
+}

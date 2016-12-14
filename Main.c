@@ -4,7 +4,7 @@
 int main(){
   int **x,i,j;
 
-  x = m_malloc(sizeof(int)*2);
+  x = m_malloc(sizeof(int*)*2);
 
   for(i = 0; i < 2; i++)
     x[i] = m_malloc(sizeof(int)*2);
@@ -19,5 +19,14 @@ int main(){
     printf("\n");
     }
 
+
+    printf("Liberamos la memoria\n");
+
+    for(i = 0; i < 2; i++)
+      for(j = 0; j < 2; j++)
+        free(x [i][j]);
+
+    for(i = 0; i < 2; i++)
+      free(x[i]);
   return 0;
 }
