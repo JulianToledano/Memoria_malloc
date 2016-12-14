@@ -3,10 +3,7 @@
 // La memoria debe de estar alineada.
 #define align4(x) (((((x)-1)>>2)<<2)+4)
 // Definimos el tamaño del bloque.
-#define TAMANO_BLOQUE 12
-
-// Puntero global al punto de comienzo del heap.
-
+#define TAMANO_BLOQUE 20
 
 // Realizamos un typedef ya que solo utilizaremos punteros
 // así la sintaxis es más sencilla.
@@ -15,15 +12,19 @@ typedef struct bloque *ptr_bloque;
 /*
  Necesitamos una pequeña estructura para
  guardar los metadatos de las reservas de memoria
-    tamano -> Tamaño del dato del bloque
+    tamano    -> Tamaño del dato del bloque
     siguiente -> Puntero al siguiente bloque
-    libre -> Flag para marcar si está libre
-    dato -> Indica el final de los metadatos, útil a la hora de dividir las celdas de memoria
+    previo    -> Puntero al bloque anterior
+    libre     -> Flag para marcar si está libre
+    ptr       -> Puntero que apunta a dato
+    dato      -> Indica el final de los metadatos, útil a la hora de dividir las celdas de memoria
 */
 struct bloque{
   size_t tamano;
-  ptr_bloque siguiente;
+  struct bloque *siguiente;
+  struct bloque *previo;
   int libre;
+  void *ptr;
   char dato[1];
 };
 

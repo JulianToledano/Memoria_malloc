@@ -15,14 +15,18 @@ ptr_bloque buscar_bloque(ptr_bloque *ultimo, size_t m_tamano){
 }
 
 ptr_bloque aumentar_heap(ptr_bloque ultimo, size_t m_tamano){
+  int stack_base;
   ptr_bloque aux;
   // sbrk(0) es un caso especial que devuelve la dirección actual del break
   aux = sbrk(0);
+  stack_base = (int)sbrk(TAMANO_BLOQUE + m_tamano);
   // Si sbrk() falla devolvemos NULL
   if(sbrk(TAMANO_BLOQUE + m_tamano) == (void*) - 1)
     return NULL;
   aux->tamano = m_tamano;
   aux->siguiente = NULL;
+  aux->previo = ultimo;
+  aux->ptr = aux->dato;
   if(ultimo)
     ultimo->siguiente = aux;
   aux->libre = 0;
@@ -32,12 +36,16 @@ ptr_bloque aumentar_heap(ptr_bloque ultimo, size_t m_tamano){
 void dividir_bloque(ptr_bloque a_dividir, size_t m_tamano){
   ptr_bloque nuevo;
   // Como dato es del tipo char[] la suma se realiza con precisión de byte
-  nuevo = a_dividir->dato + m_tamano;
+  nuevo = (ptr_bloque)(a_dividir->dato + m_tamano);
   nuevo->tamano = a_dividir->tamano - m_tamano - TAMANO_BLOQUE;
   nuevo->siguiente = a_dividir->siguiente;
+  nuevo->previo = a_dividir;
   nuevo->libre = 1;
+  nuevo->ptr = nuevo->dato;
   nuevo->tamano = m_tamano;
   nuevo->siguiente = nuevo;
+  if(nuevo->siguiente)
+    nuevo->siguiente->previo = nuevo;
 }
 
 void *m_malloc(size_t m_tamano){
